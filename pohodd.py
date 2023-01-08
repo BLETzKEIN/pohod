@@ -7,6 +7,7 @@ wrap.world.create_world(1400, 700)
 grinula=None
 qwer=0
 fall=4
+slychainaia_kroshka=None
 
 
 
@@ -84,6 +85,28 @@ def randomnaia_kroska():
     slychainaia_kroshka=kroski_sipetsa[randomi]
 
 
+def move_fish():
+    global angle
+    wrap.sprite.set_angle(fish, angle)
+    wrap.sprite.move_at_angle(fish, angle, 5)
+    if 700 <= wrap.sprite.get_bottom(fish):
+        if 90 < wrap.sprite.get_angle(fish) < 180:
+            angle = random.randint(20, 80)
+        else:
+            angle = random.randint(280, 350)
+
+    if 200 >= wrap.sprite.get_top(fish):
+        if wrap.sprite.get_reverse_x(fish):
+            angle = random.randint(190, 260)
+        else:
+            angle = random.randint(100, 180)
+
+    if 1400 <= wrap.sprite.get_right(fish):
+        wrap.sprite.set_reverse_x(fish, True)
+        angle = random.randint(210, 330)
+    if 0 >= wrap.sprite.get_left(fish):
+        angle = random.randint(30, 150)
+        wrap.sprite.set_reverse_x(fish, False)
 
 
 @wrap.on_key_down(wrap.K_ESCAPE)
@@ -104,31 +127,23 @@ def move_ryki(pos_x, pos_y):
 
 @wrap.always(20)
 def move():
-    global angle
+    global angle,slychainaia_kroshka
     if len(kroski_sipetsa)>=1:
-        randomnaia_kroska()
-        wrap.sprite.move_at_angle_point(fish,wrap.sprite.get_x(slychainaia_kroshka),wrap.sprite.get_y(slychainaia_kroshka),5)
+        if slychainaia_kroshka==None:
+            randomnaia_kroska()
+
+        else:
+            wrap.sprite.move_at_angle_point(fish, wrap.sprite.get_x(slychainaia_kroshka),
+                                            wrap.sprite.get_y(slychainaia_kroshka), 5)
+        if wrap.sprite.get_y(slychainaia_kroshka) >=697:
+            slychainaia_kroshka = None
+        elif wrap.sprite.is_collide_sprite(fish,slychainaia_kroshka):
+            kroski_sipetsa.remove(slychainaia_kroshka)
+            wrap.sprite.remove(slychainaia_kroshka)
+            slychainaia_kroshka=None
     else:
-        wrap.sprite.set_angle(fish, angle)
-        wrap.sprite.move_at_angle(fish, angle, 5)
-        if 700 <= wrap.sprite.get_bottom(fish):
-            if 90 < wrap.sprite.get_angle(fish) < 180:
-                angle = random.randint(20, 80)
-            else:
-                angle = random.randint(280, 350)
+        move_fish()
 
-        if 200 >= wrap.sprite.get_top(fish):
-            if wrap.sprite.get_reverse_x(fish):
-                angle = random.randint(190, 260)
-            else:
-                angle = random.randint(100, 180)
-
-        if 1400 <= wrap.sprite.get_right(fish):
-            wrap.sprite.set_reverse_x(fish, True)
-            angle = random.randint(210, 330)
-        if 0 >= wrap.sprite.get_left(fish):
-            angle = random.randint(30, 150)
-            wrap.sprite.set_reverse_x(fish, False)
 
 import wrap_py
 wrap_py.app.start()
