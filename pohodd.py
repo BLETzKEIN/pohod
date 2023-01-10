@@ -8,7 +8,11 @@ grinula=None
 qwer=0
 fall=4
 slychainaia_kroshka=None
-
+fishes=[]
+for e in range(300):
+    e = wrap.sprite.add("fish", random.randint(50,1350), random.randint(250,650), "fish blue1")
+    wrap.sprite.set_size_percent(e, 50, 50)
+    fishes.append(e)
 
 
 ryka = "pystota"
@@ -125,24 +129,34 @@ def move_ryki(pos_x, pos_y):
         wrap.sprite.move_bottom_to(food, wrap.sprite.get_top(water))
 
 
+def move_fish_to_kroshka () :
+    x = wrap.sprite.get_x(slychainaia_kroshka)
+    y = wrap.sprite.get_y(slychainaia_kroshka)
+    wrap.sprite.set_angle_to_point(fish, x, y)
+    wrap.sprite.move_at_angle_point(fish, x, y, 5)
+
+
 @wrap.always(20)
 def move():
     global angle,slychainaia_kroshka
-    if len(kroski_sipetsa)>=1:
-        if slychainaia_kroshka==None:
-            randomnaia_kroska()
-
-        else:
-            wrap.sprite.move_at_angle_point(fish, wrap.sprite.get_x(slychainaia_kroshka),
-                                            wrap.sprite.get_y(slychainaia_kroshka), 5)
-        if wrap.sprite.get_y(slychainaia_kroshka) >=697:
-            slychainaia_kroshka = None
-        elif wrap.sprite.is_collide_sprite(fish,slychainaia_kroshka):
-            kroski_sipetsa.remove(slychainaia_kroshka)
-            wrap.sprite.remove(slychainaia_kroshka)
-            slychainaia_kroshka=None
-    else:
+    if len(kroski_sipetsa)==0:
         move_fish()
+        return
+
+    if slychainaia_kroshka==None:
+        randomnaia_kroska()
+
+    else:
+        move_fish_to_kroshka()
+
+    if wrap.sprite.get_y(slychainaia_kroshka) >=697:
+        slychainaia_kroshka = None
+        return
+    if wrap.sprite.is_collide_sprite(fish,slychainaia_kroshka):
+        kroski_sipetsa.remove(slychainaia_kroshka)
+        wrap.sprite.remove(slychainaia_kroshka)
+        slychainaia_kroshka=None
+
 
 
 import wrap_py
