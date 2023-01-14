@@ -19,7 +19,8 @@ wrap.sprite.move_bottom_to(water, 700)
 fish = wrap.sprite.add("fish", 100, 350, "fish blue1")
 wrap.sprite.set_size_percent(fish, 50, 50)
 food = wrap.sprite.add("aqua", 1200, 100, "fishfood")
-angle = random.randint(30, 150)
+
+
 def randomniy_skin_fish ():
     w=len(skin_fish)
     randomi=random.randint(0,w-1)
@@ -97,28 +98,30 @@ def randomnaia_kroska():
 
 
 def move_fish(fish):
-    global angle
-    wrap.sprite.set_angle(fish, angle)
-    wrap.sprite.move_at_angle(fish, angle, 5)
+    wrap.sprite.move_at_angle(fish,wrap.sprite.get_angle(fish), 5)
     if 700 <= wrap.sprite.get_bottom(fish):
         if 90 < wrap.sprite.get_angle(fish) < 180:
             angle = random.randint(20, 80)
         else:
             angle = random.randint(280, 350)
+        wrap.sprite.set_angle(fish, angle)
 
     if 200 >= wrap.sprite.get_top(fish):
         if wrap.sprite.get_reverse_x(fish):
             angle = random.randint(190, 260)
         else:
             angle = random.randint(100, 180)
+        wrap.sprite.set_angle(fish, angle)
 
     if 1400 <= wrap.sprite.get_right(fish):
         wrap.sprite.set_reverse_x(fish, True)
         angle = random.randint(210, 330)
+        wrap.sprite.set_angle(fish, angle)
+
     if 0 >= wrap.sprite.get_left(fish):
         angle = random.randint(30, 150)
         wrap.sprite.set_reverse_x(fish, False)
-
+        wrap.sprite.set_angle(fish, angle)
 
 @wrap.on_key_down(wrap.K_ESCAPE)
 def yberi_ryka():
@@ -146,25 +149,26 @@ def move_fish_to_kroshka () :
 @wrap.always(20)
 def move():
     global angle,slychainaia_kroshka
-    if len(kroski_sipetsa)==0:
-        move_fish(fish)
-        #return
     for p in fishes:
         move_fish(p)
 
-    # if slychainaia_kroshka==None:
-    #     randomnaia_kroska()
-    #
-    # else:
-    #     move_fish_to_kroshka()
-    #
-    # if wrap.sprite.get_y(slychainaia_kroshka) >=697:
-    #     slychainaia_kroshka = None
-    #     return
-    # if wrap.sprite.is_collide_sprite(fish,slychainaia_kroshka):
-    #     kroski_sipetsa.remove(slychainaia_kroshka)
-    #     wrap.sprite.remove(slychainaia_kroshka)
-    #     slychainaia_kroshka=None
+    if len(kroski_sipetsa)==0:
+        move_fish(fish)
+        return
+
+    if slychainaia_kroshka==None:
+        randomnaia_kroska()
+
+    else:
+        move_fish_to_kroshka()
+
+    if wrap.sprite.get_y(slychainaia_kroshka) >=697:
+        slychainaia_kroshka = None
+        return
+    if wrap.sprite.is_collide_sprite(fish,slychainaia_kroshka):
+        kroski_sipetsa.remove(slychainaia_kroshka)
+        wrap.sprite.remove(slychainaia_kroshka)
+        slychainaia_kroshka=None
 
 
 
