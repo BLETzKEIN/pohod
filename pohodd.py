@@ -26,7 +26,7 @@ def randomniy_skin_fish ():
     randomi=random.randint(0,w-1)
     return skin_fish[randomi]
 
-for e in range(3):
+for e in range(50):
     slychainiy_skin=randomniy_skin_fish()
     e = wrap.sprite.add("fish", random.randint(50,1350), random.randint(250,650), slychainiy_skin)
     wrap.sprite.set_size_percent(e, 50, 50)
@@ -93,12 +93,11 @@ def k_roski ():
 def randomnaia_kroska():
     global slychainaia_kroshka
     w=len(kroski_sipetsa)
-    randomi=random.randint(0,w-1)
-    slychainaia_kroshka=kroski_sipetsa[randomi]
+    #randomi=random.randint(0,w-1)
+    slychainaia_kroshka=kroski_sipetsa[w-1]
 
 
-def move_fish(fish):
-    wrap.sprite.move_at_angle(fish,wrap.sprite.get_angle(fish), 5)
+def proverka_fish(fish):
     if 700 <= wrap.sprite.get_bottom(fish):
         if 90 < wrap.sprite.get_angle(fish) < 180:
             angle = random.randint(20, 80)
@@ -109,9 +108,11 @@ def move_fish(fish):
     if 200 >= wrap.sprite.get_top(fish):
         if wrap.sprite.get_reverse_x(fish):
             angle = random.randint(190, 260)
+
         else:
             angle = random.randint(100, 180)
         wrap.sprite.set_angle(fish, angle)
+        wrap.sprite.move_top_to(fish, 210)
 
     if 1400 <= wrap.sprite.get_right(fish):
         wrap.sprite.set_reverse_x(fish, True)
@@ -139,28 +140,25 @@ def move_ryki(pos_x, pos_y):
         wrap.sprite.move_bottom_to(food, wrap.sprite.get_top(water))
 
 
-def move_fish_to_kroshka () :
+def move_fish_to_kroshka (fish) :
     x = wrap.sprite.get_x(slychainaia_kroshka)
     y = wrap.sprite.get_y(slychainaia_kroshka)
     wrap.sprite.set_angle_to_point(fish, x, y)
     wrap.sprite.move_at_angle_point(fish, x, y, 5)
 
-
-@wrap.always(20)
-def move():
-    global angle,slychainaia_kroshka
-    for p in fishes:
-        move_fish(p)
-
+def move_fishess_to_kroshka(fish):
+    global slychainaia_kroshka
     if len(kroski_sipetsa)==0:
-        move_fish(fish)
+        wrap.sprite.move_at_angle(fish, wrap.sprite.get_angle(fish), 5)
+        proverka_fish(fish)
         return
 
     if slychainaia_kroshka==None:
         randomnaia_kroska()
 
     else:
-        move_fish_to_kroshka()
+        move_fish_to_kroshka(fish)
+        proverka_fish(fish)
 
     if wrap.sprite.get_y(slychainaia_kroshka) >=697:
         slychainaia_kroshka = None
@@ -169,6 +167,34 @@ def move():
         kroski_sipetsa.remove(slychainaia_kroshka)
         wrap.sprite.remove(slychainaia_kroshka)
         slychainaia_kroshka=None
+
+
+
+@wrap.always(20)
+def move():
+    #global angle,slychainaia_kroshka
+    for p in fishes:
+        move_fishess_to_kroshka(p)
+    move_fishess_to_kroshka(fish)
+
+
+    # if len(kroski_sipetsa)==0:
+    #     move_fish(fish)
+    #     return
+    #
+    # if slychainaia_kroshka==None:
+    #     randomnaia_kroska()
+    #
+    # else:
+    #     move_fish_to_kroshka()
+    #
+    # if wrap.sprite.get_y(slychainaia_kroshka) >=697:
+    #     slychainaia_kroshka = None
+    #     return
+    # if wrap.sprite.is_collide_sprite(fish,slychainaia_kroshka):
+    #     kroski_sipetsa.remove(slychainaia_kroshka)
+    #     wrap.sprite.remove(slychainaia_kroshka)
+    #     slychainaia_kroshka=None
 
 
 
