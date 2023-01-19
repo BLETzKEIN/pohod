@@ -16,9 +16,8 @@ ryka = "pystota"
 water = wrap.sprite.add("aqua", 700, 400, "water")
 wrap.sprite.set_size(water, 1400, 500)
 wrap.sprite.move_bottom_to(water, 700)
-fish = wrap.sprite.add("fish", 100, 350, "fish blue1")
-wrap.sprite.set_size_percent(fish, 50, 50)
 food = wrap.sprite.add("aqua", 1200, 100, "fishfood")
+molot=wrap.sprite.add("aqua",1000,100,"molot")
 
 
 def randomniy_skin_fish ():
@@ -26,20 +25,22 @@ def randomniy_skin_fish ():
     randomi=random.randint(0,w-1)
     return skin_fish[randomi]
 
-for e in range(50):
-    slychainiy_skin=randomniy_skin_fish()
-    e = wrap.sprite.add("fish", random.randint(50,1350), random.randint(250,650), slychainiy_skin)
-    wrap.sprite.set_size_percent(e, 50, 50)
-    fishes.append(e)
-
+def sozdaem_riby(ranger):
+    for e in range(ranger):
+        slychainiy_skin=randomniy_skin_fish()
+        e = wrap.sprite.add("fish", random.randint(50,1350), random.randint(250,650), slychainiy_skin)
+        wrap.sprite.set_size_percent(e, 50, 50)
+        fishes.append(e)
+sozdaem_riby(2)
 
 @wrap.on_mouse_down(wrap.BUTTON_LEFT)
 def foodd(pos_x, pos_y):
     global ryka,qwer
-    if wrap.sprite.is_collide_point(food, pos_x, pos_y):
+    if wrap.sprite.is_collide_point(food, pos_x, pos_y) and ryka=="pystota":
         ryka = "banka"
-        qwer=1+qwer
-    if ryka=="banka" and qwer>=2:
+    elif wrap.sprite.is_collide_point(molot,pos_x,pos_y) and ryka=="pystota":
+        ryka="molot"
+    elif ryka=="banka":
         wrap.sprite.set_angle(food, 260)
         rnge=random.randint(3,7)
         sozdaem_kroshki(rnge)
@@ -129,11 +130,14 @@ def yberi_ryka():
     global ryka,qwer
     ryka = "pystota"
     wrap.sprite.move_to(food, 1200, 100)
+    wrap.sprite.move_to(molot,1000,100)
     qwer=0
 
 
 @wrap.on_mouse_move()
 def move_ryki(pos_x, pos_y):
+    if ryka == "molot":
+        wrap.sprite.move_to(molot,pos_x,pos_y)
     if ryka == "banka":
         wrap.sprite.move_to(food, pos_x, pos_y)
     if wrap.sprite.get_bottom(food) >= wrap.sprite.get_top(water):
@@ -166,7 +170,14 @@ def move_fishess_to_kroshka(fish):
     if wrap.sprite.is_collide_sprite(fish,slychainaia_kroshka):
         kroski_sipetsa.remove(slychainaia_kroshka)
         wrap.sprite.remove(slychainaia_kroshka)
+        wrap.sprite.set_size_percent(fish,wrap.sprite.get_width_percent(fish)+2,wrap.sprite.get_height_percent(fish)+2)
+        proverka_velichini(fish)
         slychainaia_kroshka=None
+
+def proverka_velichini(fish):
+    if wrap.sprite.get_height_percent(fish)>=120:
+        wrap.sprite.set_size_percent(fish,50,50)
+        sozdaem_riby(1)
 
 
 
@@ -175,7 +186,7 @@ def move():
     #global angle,slychainaia_kroshka
     for p in fishes:
         move_fishess_to_kroshka(p)
-    move_fishess_to_kroshka(fish)
+
 
 
     # if len(kroski_sipetsa)==0:
