@@ -44,7 +44,13 @@ def foodd(pos_x, pos_y):
         wrap.sprite.set_angle(food, 260)
         rnge=random.randint(3,7)
         sozdaem_kroshki(rnge)
-
+    elif ryka=="molot":
+        wrap.sprite.set_angle(molot,0)
+        for p in fishes:
+            if wrap.sprite.get_reverse_x(p)==True:
+                wrap.sprite.set_reverse_x(p,False)
+            else:
+                wrap.sprite.set_reverse_x(p,True)
     # if wrap.sprite.is_collide_point(food, pos_x, pos_y) and ryka!="banka":
     #     ryka="banka"
     # elif ryka=="banka":
@@ -66,6 +72,7 @@ def sozdaem_kroshki(renge):
 @wrap.on_mouse_up(wrap.BUTTON_LEFT, wrap.BUTTON_MIDDLE)
 def ne_sipetsa():
     wrap.sprite.set_angle(food, 90)
+    wrap.sprite.set_angle(molot,90)
 
 
 
