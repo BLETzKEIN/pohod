@@ -1,5 +1,5 @@
 import random
-
+#w
 import wrap
 kroski_sipetsa=[]
 wrap.add_sprite_dir("spritew")
